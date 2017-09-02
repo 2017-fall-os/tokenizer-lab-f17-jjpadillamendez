@@ -1,129 +1,87 @@
-#include "mytoc.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "mytoc.h"
 
-char ** mytoc(char *str, char delim){
-	int *infotok;
-	char *truestr;
-	char **tokedstr;
 
-	TokenDetail *tokdetail = rmMultConsToks(str, delim);
-		
-	infotok = tokdetail->infotok;
-	truestr = tokdetail->truestr;
-
-	tokedstr = (char **)malloc(length(infotok) + sumlist(infotok)); 
-
-	int i, j;
-	for(i=0; infotok[i] != -1; i++){
-		tokedstr[i] = (char *)malloc(infotok[i] + 1); 
-		for(j=0; j < infotok[i]; j++){
-			tokedstr[i][j] = *truestr;
-			truestr++;
-		}
-		tokedstr[i][j] = '\0';
-		
-	}
-	tokedstr[i] = (char *)malloc(1); 
-	tokedstr[i] = 0;
-
-	free(tokdetail);
-	return tokedstr;
-
+char ** tokenize(char *str, char delim){
+    char **tokenVec;
+    char *tmpstr;
+    int tokNum, tokLen, entry, index;
+    
+    tokNum = countToks(str, delim);                 // Count number of tokens inside the given string
+    tokenVec = (char **)calloc(tokNum + 1, sizeof(char *));
+    
+    tmpstr = headAfter(str, delim);                 // Remove delimers at the begginng 
+    entry = 0;                                      // entry refers to the index of the next token to be copied
+    while(*tmpstr != '\0'){
+        tokLen = countTokLen(tmpstr, delim);        // Count length of the next token to be copied
+        if(tokLen > 0){
+            tokenVec[entry] = (char *)malloc(tokLen + 1);     // Copy token into the vector of tokens
+            for(index=0; index < tokLen; index++){
+                tokenVec[entry][index] = *tmpstr;                   
+                tmpstr++;
+            }
+            tokenVec[entry][index] = '\0';
+            entry++;                               // <- Ready for next possible token
+        }else{
+            tmpstr++;                              // Avoid delimers from being copied 
+        }
+   }
+   tokenVec[tokNum+1] = (char *)malloc(1);
+   tokenVec[tokNum+1][0] = '\0';
+   
+   return tokenVec;
+   
 }
-int sumlist(int *infotok){
-	int *temp = infotok;
-	int tsum = 0;
-	while(*temp != -1){
-		tsum += *temp;
-		temp++;
-	}
-	return tsum;
-
+/**
+ * Returns the address of the first char, after removing
+ * delim at the beginning of the string.
+ */
+char * headAfter(char *str, char delim){
+    char *tmpstr = str;
+    while(*tmpstr == delim)        // avoiding delimers at the beginning of the string
+        tmpstr++;
+    
+    return tmpstr;
+    
 }
-int length(int *p){
-	/*** Returns the length of the given pointer of chars (string) ***/
-	int *temp = p;
-
-	while(*temp != -1)					    // getting length of the string
-		temp++;
-
-	return (temp - p);				
+/**
+ * Count the number of caracthers until it finds delim OR the end
+ * of the string
+ */
+int countTokLen(char *str, char delim){
+    char *tmpstr = str;
+    int toklen = 0;
+    
+    while(*tmpstr != delim && *tmpstr != '\0'){
+        toklen++;      
+        tmpstr++;        
+    }
+    
+    return toklen;
+    
 }
-int lengthof(char *str){
-/*** Returns the length of the given pointer of chars (string) ***/
-	char *tempstr = str;
-
-	while(*tempstr != '\0')					    // getting length of the string
-		tempstr++;
-
-	return (tempstr - str);
-
-}
-TokenDetail *rmMultConsToks(char *str, char delim){
-	char *tempstr, *truestr, istokend; 
-	int *infotok; 
-	int numtoks, truetoks, toklen, i, j;
-	
-	tempstr = str;
-	while(*tempstr == delim)						//removes delims at the beginning
-		tempstr++;
-
-	// counting number of all tokens except single tokens in between chars
-	numtoks = 0;
-	truetoks = 0;
-	istokend = 0;
-	for(i=0; tempstr[i] != '\0'; i++){
-		if(tempstr[i] == delim){
-			for( ; tempstr[i] == delim; i++)
-				numtoks++;
-			if(tempstr[i] == '\0'){					// avoiding end tokens
-				istokend = 1;
-				break;
-			}
-			else
-				truetoks++;							// token in between char are valid, while start OR end tokens are not
-		}
-	}
-
-	if(!istokend)
-		truetoks++;
-
-	// building a string without multiple consecutive tokens
-	truestr = (char *)malloc(lengthof(str) - numtoks + 1);
-	infotok = (int *)malloc(truetoks + 1);
-	
-	i=0, j=0;
-	toklen = 0;
-	while(*tempstr != '\0'){
-		truestr[i] = *tempstr;
-		tempstr++;
-		i++;
-		toklen++;
-		if(*tempstr == delim){
-			while(*tempstr == delim)
-				tempstr++;
-			infotok[j] = toklen;
-			toklen = 0;
-			j++;
-			
-			if(*tempstr == '\0')					// avoiding end tokens
-				break;
-		} 
-		
-	}
-	if(!istokend){
-		infotok[j] = toklen;
-		j++;
-	}
-
-	truestr[i] = '\0';		
-	infotok[j] = -1;
-
-	TokenDetail *tokendetail = (TokenDetail *)malloc(sizeof(TokenDetail));
-	tokendetail->truestr = truestr;
-	tokendetail->infotok = infotok;
-
-	return tokendetail;
-
+/**
+ *  Count number of tokens for the given string and delimer
+ *  character. In order words, this method counts number of non
+ *  -consecutive delim inside the string plus one.
+ */
+int countToks(char *str, char delim){
+    int tokNum = 1;
+    char *tmpstr = headAfter(str, delim);   // removes delimers at the begginng, only inbetween counts
+    
+    while(*tmpstr != '\0'){
+        if(*tmpstr == delim){
+            tmpstr = headAfter(tmpstr, delim);      // removes consecutive delimers
+            
+            if(*tmpstr == '\0')                      // avoids delimers at the end of the string
+                break;
+            
+            tokNum++;            
+        }
+        tmpstr++;
+    }
+    
+    return tokNum;
+    
 }

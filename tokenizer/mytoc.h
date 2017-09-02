@@ -1,20 +1,14 @@
 #ifndef mytoc		// prevent multiple inclusion
 #define mytoc
 
-typedef struct TokenDetaill {
-	char *truestr;
-	int  *infotok;
-} TokenDetail;
 
-int length(int *p);
+char ** tokenize(char *str, char delim);
 
-char ** mytoc(char *str, char delim);
+char * headAfter(char *str, char delim);
 
-TokenDetail *rmMultConsToks(char *str, char delim);
+int countToks(char *str, char delim);
 
-int lengthof(char *str);
-
-int sumlist(int *infotok);
+int countTokLen(char *str, char delim);
 
 
 #endif 
