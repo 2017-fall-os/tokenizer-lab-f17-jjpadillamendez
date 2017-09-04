@@ -1,59 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <assert.h>
 #include "mytoc.h"
+#include "test.h"
+#include "strlib2.h"
 
-#define BUFF_LIMIT 100
-#define DELIM_LIMIT 1
+#define BUFFERLIMIT 102
 
-void freeMemory(char *str, char *delim, char **tokedVec){
-    int index = 0;
-    while(tokedVec[index]){
-        free(tokedVec[index]);
-        index++;
-    }
-    free(str);
-    free(delim);
-    free(tokedVec);
-    
-}
-void readInput(char *buffer, int size){
-    
-    
-}
 int main(){
 	
-    int index;
-    char **tokedVec;
+    char **tokenVec;
+    char *str;
+    char delim;
         
-    printf("\n=====================================================\n");
-    printf("====       Lab Assignment I: My Toc Program       ===\n");
-    printf("=====================================================\n\n");
+    printf("\n=======================================================\n");
+    printf("=====         Lab Assignment I: Toc Program       =====\n");
+    printf("=======================================================\n");
+    printf("== Enter a string at the prompt to break it in tokens\n");
+    printf("== Enter [exit] to quit the program\n");
+    printf("== Default delimit is an space [' ']\n");
+    printf("=======\n");
+                                                        
+    delim = askForDelimit();                                 // Ask for a special delimit
     
-    printf("Enter [Crtl + d] to exit the program\n");
+    printf(";start\n");
     while(1){
-        char str[BUFF_LIMIT], delim[DELIM_LIMIT];
-        printf("Enter String: ");
-        readInput(str, BUFF_LIMIT);
-        printf("Enter Delimer: ");
-        readInput(delim, DELIM_LIMIT);
-        
-        tokedVec = tokenize(str,*delim);
-        
-        printf("\nGiven String: %s\n", str);
-        printf("Token Vector => \n");
-	
+        str = getUserInput();
 
-        index = 0;
-        while(tokedVec[index]){
-            printf("\t\t: %s \n", tokedVec[index]);
-            index++;
+        if(strcomp(str, "exit"))                             // Check if the user wants to exit
+            break;
+         
+        tokenVec = tokenize(str,delim);                      // Generate token vector
+    
+        printf("Token Vector => \n");
+ 	
+        for(int i=0; tokenVec[i]; i++){
+             printf("\t\t: %s \n", tokenVec[i]);             // Print token vector 
         }
-        printf(":");
-        //freeMemory(str, delim, tokedVec);
-           
+        free(str);                                           // Free memory for next loop
+        freeVector(tokenVec); 
+        printf(";next\n");
         
     }
+       
     return 0;
 	
+}
+char *getUserInput(){    
+    char *str = (char *)malloc(BUFFERLIMIT);
+    int len;
+    
+    write(1, "$ ", 2);                                   // Read user input
+    len = read(0, str, BUFFERLIMIT);
+    rmNewLineChar(str);
+      
+    str = (char *)realloc(str, len);
+    
+    return str;
+    
+}
+char askForDelimit(){
+    char *input;
+    char delim = ' ';                               // Default Delimit is an space [' ']
+    
+    while(1){
+        printf("Optional: Would you like to set a special delimit (y,n)? \n");
+        input = getUserInput();
+        
+        if(strlen2(input) == 1){          
+            if(input[0] == 'y'){
+                free(input);                        // Free input to ask again for a user input
+                printf("Enter Delimit: \n");
+                input = getUserInput();            
+                if(strlen2(input) == 1){                   // Ask for a single char as Delimit
+                    delim = input[0];
+                    printf("aqui");
+                    break;
+                }
+            }
+            else if(input[0] == 'n'){
+                break;
+            }
+        }
+        free(input);                                // Input was not correct, then ask again
+    }
+    free(input);                                    // input pointer will not be used again
+    return delim;
+    
+}
+void freeVector(char **tokenVec){
+    for(int i=0; tokenVec[i] != '\0'; i++){
+        free(tokenVec[i]);
+    }
+    free(tokenVec);
+    
 }

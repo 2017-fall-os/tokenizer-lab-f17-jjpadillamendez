@@ -8,27 +8,32 @@ char ** tokenize(char *str, char delim){
     char *tmpstr;
     int tokNum, tokLen, entry, index;
     
-    tokNum = countToks(str, delim);                 // Count number of tokens inside the given string
-    tokenVec = (char **)calloc(tokNum + 1, sizeof(char *));
-    
-    tmpstr = headAfter(str, delim);                 // Remove delimers at the begginng 
-    entry = 0;                                      // entry refers to the index of the next token to be copied
-    while(*tmpstr != '\0'){
-        tokLen = countTokLen(tmpstr, delim);        // Count length of the next token to be copied
-        if(tokLen > 0){
-            tokenVec[entry] = (char *)malloc(tokLen + 1);     // Copy token into the vector of tokens
-            for(index=0; index < tokLen; index++){
-                tokenVec[entry][index] = *tmpstr;                   
-                tmpstr++;
+    if(*str != 0){
+        tokNum = countToks(str, delim);                 // Count number of tokens inside the given string
+        tokenVec = (char **)calloc(tokNum + 1, sizeof(char *));
+        
+        tmpstr = headAfter(str, delim);                 // Remove delimers at the begginng 
+        entry = 0;                                      // entry refers to the index of the next token to be copied
+        while(*tmpstr != '\0'){
+            tokLen = countTokLen(tmpstr, delim);        // Count length of the next token to be copied
+            if(tokLen > 0){
+                tokenVec[entry] = (char *)malloc(tokLen + 1);     // Copy token into the vector of tokens
+                for(index=0; index < tokLen; index++){
+                    tokenVec[entry][index] = *tmpstr;                   
+                    tmpstr++;
+                }
+                tokenVec[entry][index] = '\0';
+                entry++;                                // <- Ready for next possible token
+            }else{
+                tmpstr++;                                       // Avoid delimers from being copied 
             }
-            tokenVec[entry][index] = '\0';
-            entry++;                               // <- Ready for next possible token
-        }else{
-            tmpstr++;                              // Avoid delimers from being copied 
         }
    }
-   tokenVec[tokNum+1] = (char *)malloc(1);
-   tokenVec[tokNum+1][0] = '\0';
+   else{
+       tokNum = 0;                                     //Empty string == Empty Vector
+       tokenVec = (char **)calloc(1, sizeof(char *));    
+   }
+   tokenVec[tokNum] = (char *)0;
    
    return tokenVec;
    
