@@ -14,5 +14,5 @@ The given test cases at the Operating System website were run to demonstrate the
             " HelloWorld"
             
 The following screenshot displays output of the program after running this test cases.
-![Alt text](https://github.com/2017-fall-os/tokenizer-lab-f17-jjpadillamendez/tree/master/tokenizer/testcases.jpg?raw=true)
+![Alt text](https://github.com/2017-fall-os/tokenizer-lab-f17-jjpadillamendez/blob/master/tokenizer/testcases.jpg?raw=true)
 
