@@ -17,9 +17,10 @@ int main(){
     printf("\n=======================================================\n");
     printf("=====         Lab Assignment I: Toc Program       =====\n");
     printf("=======================================================\n");
-    printf("== Enter a string at the prompt to break it in tokens\n");
-    printf("== Enter [exit] to quit the program\n");
-    printf("== Default delimit is an space [' ']\n");
+    printf("== Instructions:\n");
+    printf("===  Enter a string at the prompt to break it in tokens\n");
+    printf("===  Enter [exit] to quit the program\n");
+    printf("===  Default delimit is a space [' ']\n");
     printf("=======\n");
                                                         
     delim = askForDelimit();                                 // Ask for a special delimit
@@ -28,9 +29,6 @@ int main(){
     while(1){
         str = getUserInput();
 
-        if(strcomp(str, "exit"))                             // Check if the user wants to exit
-            break;
-         
         tokenVec = tokenize(str,delim);                      // Generate token vector
     
         printf("Token Vector => \n");
@@ -57,6 +55,9 @@ char *getUserInput(){
       
     str = (char *)realloc(str, len);
     
+    if(strcomp(str, "exit"))                             // Check if the user wants to exit
+        exit(0);
+    
     return str;
     
 }
@@ -75,7 +76,6 @@ char askForDelimit(){
                 input = getUserInput();            
                 if(strlen2(input) == 1){                   // Ask for a single char as Delimit
                     delim = input[0];
-                    printf("aqui");
                     break;
                 }
             }
