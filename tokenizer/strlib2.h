@@ -3,7 +3,7 @@
 
 int strlen2(char *str);
 
-void rmNewLineChar(char *str);
+void rmCharIn(char *str, char chToRm);
 
 int strcomp(char *str, char *str2);
 

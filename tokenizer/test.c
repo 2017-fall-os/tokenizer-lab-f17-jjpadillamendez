@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>
+#include "assert2.h"
 #include "mytoc.h"
 #include "test.h"
 #include "strlib2.h"
@@ -49,13 +49,14 @@ char *getUserInput(){
     char *str = (char *)malloc(BUFFERLIMIT);
     int len;
     
-    write(1, "$ ", 2);                                   // Read user input
+    write(1, "$ ", 2);                           // Read user input
     len = read(0, str, BUFFERLIMIT);
-    rmNewLineChar(str);
-      
+    assert2(len < BUFFERLIMIT, "Limit of string length was overpassed");              
+    
+    rmCharIn(str, '\n');                         // Remove new line char in the inputed string
     str = (char *)realloc(str, len);
     
-    if(strcomp(str, "exit"))                             // Check if the user wants to exit
+    if(strcomp(str, "exit"))                     // Check if the user wants to exit
         exit(0);
     
     return str;
@@ -63,7 +64,7 @@ char *getUserInput(){
 }
 char askForDelimit(){
     char *input;
-    char delim = ' ';                               // Default Delimit is an space [' ']
+    char delim = ' ';                            // Default Delimit is an space [' ']
     
     while(1){
         printf("Optional: Would you like to set a special delimit (y,n)? \n");

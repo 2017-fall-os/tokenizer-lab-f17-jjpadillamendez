@@ -7,9 +7,9 @@ int strlen2(char *str){
     return (tmpstr - str);
     
 }
-void rmNewLineChar(char *str){
+void rmCharIn(char *str, char chToRm){
     int i=0;
-    while(str[i] != '\n' && str[i] != '\0')
+    while(str[i] != chToRm && str[i] != '\0')
         i++;
     str[i] = 0;
     
