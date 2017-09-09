@@ -46,21 +46,20 @@ The following screenshot displays the output of the program after running these 
 
 How to used this program:
     1. First, the program asks for specifying a delimiter:
-        - Enter "y", to accept change the default delimiter, which is an space [' ']
-        - Enter "n", to avoid this and use the default delimiter
-        - Any other input is rejected
+       ... - Enter "y", to accept change the default delimiter, which is an space [' ']
+       ... - Enter "n", to avoid this and use the default delimiter
+       ... - Any other input is rejected
     1.1 After accepting to change the delimiter, the program asks for the new one
-        - Enter the new delimiter, which is a single characther. Any other input is rejected.
+       ... - Enter the new delimiter, which is a single characther. Any other input is rejected.
     2. Second, this step is a loop in which the program prints a prompt "$"
-        - Enter any string, and the program will output the result as vector of string
+       ... - Enter any string, and the program will output the result as vector of string
     Note: At any step, enter "exit" to quit the program
     
 Important Note: 
-    This program considers continuos delimiters as a single delimiter. Similarly, delimiters that are at the beginning
-    or at the end of a given string are ignored. For example, the following two strings are considered as similar strings.
+This program considers continuos delimiters as a single delimiter. Similarly, delimiters that are at the beginning or at the end of a given string are ignored. For example, the following two strings are considered as similar strings.
     
                     - "      Hello     World!      "
                     - "Hello World!"
                     
-    Finally, the limit of characthers in each input string is 100. However, this length can be easily increased at the code level inside test.c, in which there is a constant variable named "BUFFERLIMIT".
+Finally, the limit of characthers in each input string is 100. However, this length can be easily increased at the code level inside test.c, in which there is a constant variable named "BUFFERLIMIT".
     
