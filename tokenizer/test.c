@@ -28,15 +28,16 @@ int main(){
     printf("===  Enter a string at the prompt to break it in tokens\n");
     printf("===  Enter [exit] to quit the program\n");
     printf("===  Default delimit is a space [' ']\n");
+    printf("===  Limit of input string is 100 \n"); 
     printf("=======\n");
                                                         
-    delim = askForDelimit();                                 // Ask for a special delimit
+    delim = askForDelimit();                                // Ask for a specific delimit
     
     printf(";start\n");
     while(1){
-        str = getUserInput();
+        str = getUserInput();                               // Get input string
 
-        tokenVec = tokenize(str,delim);                      // Generate token vector
+        tokenVec = tokenize(str,delim);                     // Generate token vector
     
         printf("Token Vector => \n");
  	
@@ -52,6 +53,8 @@ int main(){
     return 0;
 	
 }
+/** Returns an string which contains the input of the user
+ */
 char *getUserInput(){    
     char *str = (char *)malloc(BUFFERLIMIT);
     int len;
@@ -60,7 +63,7 @@ char *getUserInput(){
     len = read(0, str, BUFFERLIMIT);
     assert2(len < BUFFERLIMIT, "Limit of string length was overpassed");              
     
-    rmCharIn(str, '\n');                         // Remove new line char in the inputed string
+    rmCharIn(str, '\n');                         // Remove new line char in the input string
     str = (char *)realloc(str, len);
     
     if(strcomp(str, "exit"))                     // Check if the user wants to exit
@@ -69,9 +72,12 @@ char *getUserInput(){
     return str;
     
 }
+/** Returns the delimit to be used by the tokenizer; it asks the user to enter
+ *  a specific delimit. If not, the default delimit is an space.
+ */
 char askForDelimit(){
     char *input;
-    char delim = ' ';                            // Default Delimit is an space [' ']
+    char delim = ' ';                            // default delimit is an space [' ']
     
     while(1){
         printf("Optional: Would you like to set a special delimit (y,n)? \n");
@@ -79,14 +85,18 @@ char askForDelimit(){
         
         if(strlen2(input) == 1){          
             if(input[0] == 'y'){
-                free(input);                        // Free input to ask again for a user input
-                printf("Enter Delimit: \n");
-                input = getUserInput();            
-                if(strlen2(input) == 1){                   // Ask for a single char as Delimit
-                    delim = input[0];
-                    break;
+                while(1){
+                   free(input);                       // Free input to ask again for a user input
+                   printf("Enter Delimit: \n"); 
+                   input = getUserInput(); 
+                   if(strlen2(input) == 1){           // delimer is a single char
+                       delim = input[0];
+                       break;                         // break inside while loop
+                   }
+                   printf("Error: Delimit is a single char, please try it again \n");
                 }
-            }
+                break;                                // if inside while was broken then outside while too
+            }           
             else if(input[0] == 'n'){
                 break;
             }
@@ -97,6 +107,9 @@ char askForDelimit(){
     return delim;
     
 }
+/** Free the given vector of strings. First, it frees each string
+ *  then the empty vector.
+ */
 void freeVector(char **tokenVec){
     for(int i=0; tokenVec[i] != '\0'; i++){
         free(tokenVec[i]);
