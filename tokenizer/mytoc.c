@@ -1,3 +1,10 @@
+/****************************************************/
+/* Lab Assignment 1: Tokenizer   Date: 09/10/2017   */
+/* Author: Jesus Padilla    Class: Operating System */
+/* Prof: Dr. Freudenthal    TA: Adrian Veliz        */
+/* This class implements a tokenizer, which given   */
+/* a string, splits it into tokens                  */
+/****************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include "mytoc.h"
@@ -9,7 +16,7 @@ char ** tokenize(char *str, char delim){
     int tokNum, tokLen, entry, index;
     
     if(*str != 0){
-        tokNum = countToks(str, delim);                 // Count number of tokens inside the given string
+        tokNum = countToks(str, delim);                 // Count number of tokens in the string (str) delimited by (delim)
         tokenVec = (char **)calloc(tokNum + 1, sizeof(char *));
         
         tmpstr = headAfter(str, delim);                 // Remove delimers at the begginng 
