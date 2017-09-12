@@ -1,8 +1,8 @@
-all: lab1
+all: test
 
 CFLAGS = -g -O2
 
-lab1: mytoc.o strlib2.o test.o
-	cc -o lab1 mytoc.o strlib2.o test.o
+test: mytoc.o strlib2.o test.o
+	cc -o test mytoc.o strlib2.o test.o
 clean:
-	rm -f  *.o lab1 lab1.exe
+	rm -f  *.o test test.exe

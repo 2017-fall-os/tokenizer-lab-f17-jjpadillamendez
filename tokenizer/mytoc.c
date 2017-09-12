@@ -67,26 +67,26 @@ int countTokLen(char *str, char delim){
     
     while(*tmpstr != delim && *tmpstr != '\0'){
         toklen++;      
-        tmpstr++;        
+        tmpstr++;                // ready to check next char in the string
     }
     
     return toklen;
     
 }
 /**
- *  Count number of tokens for the given string and delimer
- *  character. In order words, this method counts number of non
- *  -consecutive delim inside the string plus one.
+ *  Count number of tokens in the given string delimited by 
+ *  delim. In order words, this method counts number of non-
+ *  consecutive delim inside the string plus one.
  */
 int countToks(char *str, char delim){
     int tokNum = 1;
-    char *tmpstr = headAfter(str, delim);   // removes delimers at the begginng, only inbetween counts
+    char *tmpstr = headAfter(str, delim);           // removes delimers at the begginng
     
     while(*tmpstr != '\0'){
         if(*tmpstr == delim){
             tmpstr = headAfter(tmpstr, delim);      // removes consecutive delimers
             
-            if(*tmpstr == '\0')                      // avoids delimers at the end of the string
+            if(*tmpstr == '\0')                     // avoids delimers at the end of the string
                 break;
             
             tokNum++;            

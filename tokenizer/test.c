@@ -13,7 +13,7 @@
 #include "test.h"
 #include "strlib2.h"
 
-#define BUFFERLIMIT 102
+#define BUFFERLIMIT 102                             // Include space for '/n' and '/0'
 
 int main(){
 	
@@ -41,8 +41,8 @@ int main(){
     
         printf("Token Vector => \n");
  	
-        for(int i=0; tokenVec[i]; i++){
-             printf("\t\t: %s \n", tokenVec[i]);             // Print token vector 
+        for(int i=0; tokenVec[i]; i++){                      // Print token vector 
+             printf("\t\t: %s \n", tokenVec[i]);            
         }
         free(str);                                           // Free memory for next loop
         freeVector(tokenVec); 
@@ -63,7 +63,7 @@ char *getUserInput(){
     len = read(0, str, BUFFERLIMIT);
     assert2(len < BUFFERLIMIT, "Limit of string length was overpassed");              
     
-    rmCharIn(str, '\n');                         // Remove new line char in the input string
+    rmCharIn(str, '\n');                         // Remove new line char, replace it for '\0'
     str = (char *)realloc(str, len);
     
     if(strcomp(str, "exit"))                     // Check if the user wants to exit
@@ -101,7 +101,7 @@ char askForDelimit(){
                 break;
             }
         }
-        free(input);                                // Input was not correct, then ask again
+        free(input);                                
     }
     free(input);                                    // input pointer will not be used again
     return delim;

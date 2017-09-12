@@ -61,5 +61,6 @@ Important Note:
                     - "      Hello     World!      "
                     - "Hello World!"
                     
-...Finally, the limit of characthers in each input string is 100. However, this length can be easily increased at the code level inside test.c, in which there is a constant variable named "BUFFERLIMIT".
+...The limit of characthers in each input string is 100. However, this length can be easily increased at the code level inside test.c, in which there is a constant variable named "BUFFERLIMIT".
+...Finally, the file assert2.c was borrowed from Dr. Freudenthal, which adds the feature of adding an error message to the traditional assert method.
     
